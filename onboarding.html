@@ -1,0 +1,908 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f8f5">
+  <title>Setup Your Home Energy & Devices | MyEMS</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=Manrope:wght@500;600;700;800&display=swap">
+  <style>
+    :root {
+      --ink: #111d17;
+      --muted: #5e6f67;
+      --muted-light: #899a92;
+      --green: #1d5641;
+      --green-dark: #143d2e;
+      --green-light: #eaf3ee;
+      --green-accent: #2e7d5b;
+      --bg: #f5f7f4;
+      --card-bg: #ffffff;
+      --border: #e2e8e4;
+      --border-focus: #1d5641;
+      --blue: #1d4ed8;
+      --blue-soft: #eff6ff;
+      --amber: #b45309;
+      --amber-soft: #fef3c7;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 40px 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container {
+      width: min(100%, 780px);
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: 0 16px 48px -12px rgba(17, 29, 23, 0.08), 0 2px 6px rgba(17, 29, 23, 0.03);
+      overflow: hidden;
+    }
+    .header {
+      background: linear-gradient(135deg, #13382b 0%, #1d5641 100%);
+      color: white;
+      padding: 34px 38px 30px;
+      position: relative;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(255, 255, 255, 0.14);
+      padding: 5px 12px;
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      backdrop-filter: blur(8px);
+    }
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #4ade80;
+    }
+    .header h1 {
+      margin: 0;
+      font-family: 'Manrope', sans-serif;
+      font-size: 27px;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      line-height: 1.25;
+    }
+    .header p {
+      margin: 10px 0 0;
+      color: #d2e4da;
+      font-size: 13px;
+      line-height: 1.6;
+      max-width: 640px;
+    }
+    .steps {
+      display: flex;
+      gap: 12px;
+      padding: 18px 38px;
+      background: #fafbfa;
+      border-bottom: 1px solid var(--border);
+    }
+    .step-pill {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+    .step-pill.active {
+      border-color: var(--green);
+      color: var(--green);
+      background: var(--green-light);
+    }
+    .step-pill .num {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #edf0ee;
+      color: var(--muted);
+      display: grid;
+      place-items: center;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+    .step-pill.active .num {
+      background: var(--green);
+      color: white;
+    }
+    .content-body {
+      padding: 32px 38px 36px;
+    }
+    .step-section {
+      display: none;
+    }
+    .step-section.active {
+      display: block;
+      animation: fadeIn 0.2s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .box {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+      background: #ffffff;
+    }
+    .box-head {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+    .box-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: var(--green-light);
+      color: var(--green);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+    .box-head h3 {
+      margin: 0;
+      font-size: 16px;
+      font-family: 'Manrope', sans-serif;
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+    }
+    .box-head p {
+      margin: 4px 0 0;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .dropzone {
+      border: 2px dashed #cbd5e1;
+      border-radius: var(--radius-md);
+      padding: 34px 20px;
+      text-align: center;
+      background: #f8fafc;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .dropzone:hover {
+      border-color: var(--green);
+      background: #f3f7f5;
+    }
+    .dropzone-icon {
+      width: 46px;
+      height: 46px;
+      margin: 0 auto 12px;
+      border-radius: 50%;
+      background: white;
+      border: 1px solid #e2e8f0;
+      display: grid;
+      place-items: center;
+      color: #64748b;
+      transition: all 0.2s;
+    }
+    .dropzone:hover .dropzone-icon {
+      color: var(--green);
+      border-color: var(--green-light);
+      transform: translateY(-2px);
+    }
+    .dropzone input { display: none; }
+    .bill-preview {
+      display: none;
+      margin-top: 18px;
+      padding: 16px 18px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: var(--radius-sm);
+    }
+    .bill-preview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .bill-preview-title {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #0f766e;
+    }
+    .bill-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .bill-stat {
+      background: white;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid #e2e8f0;
+    }
+    .bill-stat span {
+      font-size: 10px;
+      color: var(--muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .bill-stat strong {
+      display: block;
+      font-size: 19px;
+      font-family: 'Manrope', sans-serif;
+      font-weight: 700;
+      color: var(--ink);
+      margin-top: 4px;
+    }
+    .device-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 16px 0;
+    }
+    .device-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      background: #ffffff;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      position: relative;
+    }
+    .device-card:hover {
+      border-color: #cbd5e1;
+      background: #fafbfa;
+    }
+    .device-card.selected {
+      border-color: var(--green);
+      background: #f7faf8;
+    }
+    .device-icon-wrapper {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: #f1f5f3;
+      color: var(--green);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      transition: all 0.18s;
+    }
+    .device-card.selected .device-icon-wrapper {
+      background: var(--green-light);
+      color: var(--green);
+    }
+    .device-meta {
+      flex: 1;
+      min-width: 0;
+    }
+    .device-meta b {
+      font-size: 12px;
+      display: block;
+      color: var(--ink);
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .device-meta small {
+      font-size: 11px;
+      color: var(--muted);
+      display: block;
+      margin-top: 2px;
+    }
+    .device-check {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 1.5px solid #cbd5e1;
+      display: grid;
+      place-items: center;
+      color: transparent;
+      transition: all 0.18s;
+      flex-shrink: 0;
+    }
+    .device-card.selected .device-check {
+      background: var(--green);
+      border-color: var(--green);
+      color: white;
+    }
+    .btn {
+      background: var(--green);
+      color: white;
+      border: 0;
+      border-radius: 11px;
+      padding: 12px 22px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.18s ease;
+    }
+    .btn:hover {
+      background: var(--green-dark);
+      transform: translateY(-1px);
+    }
+    .btn-secondary {
+      background: #ffffff;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+    }
+    .btn-secondary:hover {
+      background: #f8fafc;
+      border-color: #94a3b8;
+      transform: none;
+    }
+    .foot-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 9px;
+      background: #e0f2fe;
+      color: #0369a1;
+      border-radius: 99px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .chip-green {
+      background: #dcfce7;
+      color: #15803d;
+    }
+    .progress-bar-container {
+      height: 8px;
+      background: #f1f5f9;
+      border-radius: 99px;
+      overflow: hidden;
+      display: flex;
+      margin: 14px 0 10px;
+    }
+    .progress-bar-fill-monitored {
+      background: #2563eb;
+      width: 66%;
+      transition: width 0.3s;
+    }
+    .progress-bar-fill-phantom {
+      background: #ea580c;
+      width: 34%;
+      transition: width 0.3s;
+    }
+    @media(max-width:640px) {
+      .steps { flex-direction: column; padding: 18px 20px; }
+      .content-body { padding: 22px 20px 28px; }
+      .header { padding: 26px 20px 22px; }
+      .device-grid { grid-template-columns: 1fr; }
+      .bill-preview-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header">
+      <div class="badge">
+        <span class="badge-dot"></span>
+        <span>Household Onboarding</span>
+      </div>
+      <h1 id="welcomeGreeting">Connect your home energy</h1>
+      <p>Configure your two primary data sources: your <b>Electricity Bill</b> (macro baseline) and your <b>Google Home Devices</b> (micro appliance telemetry). Together, they isolate where energy is consumed and uncover phantom power draw.</p>
+    </div>
+
+    <div class="steps">
+      <div class="step-pill active" id="pill1">
+        <span class="num">1</span>
+        <span>1. Electricity Bill</span>
+      </div>
+      <div class="step-pill" id="pill2">
+        <span class="num">2</span>
+        <span>2. Google Home</span>
+      </div>
+      <div class="step-pill" id="pill3">
+        <span class="num">3</span>
+        <span>3. Disaggregation Audit</span>
+      </div>
+    </div>
+
+    <div class="content-body">
+      <!-- STEP 1: BILL SCAN -->
+      <div class="step-section active" id="sectionStep1">
+        <div class="box">
+          <div class="box-head">
+            <div class="box-icon">
+              <!-- Document icon -->
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+                <line x1="10" y1="9" x2="8" y2="9"/>
+              </svg>
+            </div>
+            <div>
+              <h3>Upload Electricity Bill (Ground Truth)</h3>
+              <p>Your monthly utility statement establishes total consumption and tariff slabs.</p>
+            </div>
+          </div>
+
+          <div class="dropzone" id="onboardingDropZone" onclick="document.getElementById('onboardingFileInput').click()">
+            <input type="file" id="onboardingFileInput" accept="image/*,.pdf">
+            <div class="dropzone-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/>
+                <line x1="12" y1="3" x2="12" y2="15"/>
+              </svg>
+            </div>
+            <strong style="font-size:14px;display:block;color:#0f172a">Click or Drag & Drop Bill Image or PDF</strong>
+            <small style="color:#64748b;font-size:11px;display:block;margin-top:4px">Compatible with BSES, Tata Power, BESCOM, Adani, or any State DISCOM</small>
+          </div>
+
+          <div id="scanFeedback" style="display:none;margin-top:14px;padding:12px 14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;font-size:12px;color:#166534">
+            Processing document with OCR parser…
+          </div>
+
+          <div class="bill-preview" id="billPreviewCard">
+            <div class="bill-preview-header">
+              <div class="bill-preview-title">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <span>Bill Extracted Successfully via OCR</span>
+              </div>
+              <span class="chip chip-green">VERIFIED</span>
+            </div>
+            <div class="bill-preview-grid">
+              <div class="bill-stat">
+                <span>Monthly Units</span>
+                <strong id="onboardKwh">684 kWh</strong>
+              </div>
+              <div class="bill-stat">
+                <span>Total Amount</span>
+                <strong id="onboardCost">₹5,472</strong>
+              </div>
+              <div class="bill-stat">
+                <span>Effective Tariff</span>
+                <strong id="onboardRate">₹8.0/kWh</strong>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:18px;display:flex;gap:10px">
+            <button type="button" class="btn btn-secondary" id="useSampleBillBtn" style="font-size:12px;padding:10px 18px">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+              </svg>
+              <span>Use Sample Discom Bill (684 kWh)</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="foot-actions">
+          <span style="font-size:11px;color:var(--muted)">Step 1 of 3 · Calibrates total monthly draw</span>
+          <button type="button" class="btn" id="nextToStep2Btn">
+            <span>Continue to Google Home</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 2: GOOGLE HOME LINK -->
+      <div class="step-section" id="sectionStep2">
+        <div class="box">
+          <div class="box-head">
+            <div class="box-icon" style="background:#eff6ff;color:#1d4ed8">
+              <!-- Smart Hub icon -->
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                <polyline points="9 22 9 12 15 12 15 22"/>
+              </svg>
+            </div>
+            <div>
+              <h3>Link Google Home Smart Telemetry</h3>
+              <p>Synchronize live device operational states, cooling runtimes, and plug duty cycles.</p>
+            </div>
+          </div>
+
+          <!-- GOOGLE ID INTEGRATION CARD -->
+          <div class="google-auth-sync-card" id="googleAuthSyncCard" style="padding:16px 18px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;margin-bottom:18px">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+              <div style="display:flex;align-items:center;gap:12px">
+                <div style="width:40px;height:40px;border-radius:10px;background:white;border:1px solid #e2e8f0;display:grid;place-items:center;flex-shrink:0;box-shadow:0 1px 3px rgba(0,0,0,0.04)">
+                  <svg width="20" height="20" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                  </svg>
+                </div>
+                <div>
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <b style="font-size:13px;color:#0f172a" id="googleAccountName">Akshit's Google Account</b>
+                    <span class="chip chip-green" id="googleAccountBadge">SYNCED FROM GOOGLE ID</span>
+                  </div>
+                  <small style="color:#64748b;font-size:11px" id="googleAccountEmail">user@gmail.com · Smart Device Management (SDM) API</small>
+                </div>
+              </div>
+              <button type="button" class="btn btn-secondary" id="switchGoogleAccountBtn" style="font-size:11px;padding:7px 12px">
+                Switch Google ID
+              </button>
+            </div>
+            <div style="margin-top:12px;padding-top:10px;border-top:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;font-size:11px;color:#166534">
+              <span style="display:flex;align-items:center;gap:6px">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span><b>Imported from Google Home</b>: <span id="homeStructureLabel">Akshit's Home Structure</span> (4 smart devices)</span>
+              </span>
+              <span style="color:#0369a1;font-weight:600">OAuth 2.0 Bridge Active</span>
+            </div>
+          </div>
+
+          <p style="font-size:12px;font-weight:700;color:var(--ink);margin:16px 0 10px">Discovered devices included in telemetry feed:</p>
+          
+          <div class="device-grid">
+            <!-- Device 1: AC -->
+            <div class="device-card selected" onclick="toggleDevice(this)">
+              <div class="device-icon-wrapper">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="2" x2="12" y2="22"/>
+                  <line x1="2" y1="12" x2="22" y2="12"/>
+                  <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+                  <line x1="4.93" y1="19.07" x2="19.07" y2="4.93"/>
+                </svg>
+              </div>
+              <div class="device-meta">
+                <b>Master Bedroom AC</b>
+                <small>1,650 W · 4.0 hrs/day (~198 kWh)</small>
+              </div>
+              <div class="device-check">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Device 2: Geyser -->
+            <div class="device-card selected" onclick="toggleDevice(this)">
+              <div class="device-icon-wrapper">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+                </svg>
+              </div>
+              <div class="device-meta">
+                <b>Smart Storage Geyser</b>
+                <small>2,000 W · 25 mins/day (~144 kWh)</small>
+              </div>
+              <div class="device-check">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Device 3: Smart Plug -->
+            <div class="device-card selected" onclick="toggleDevice(this)">
+              <div class="device-icon-wrapper">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22v-5"/>
+                  <path d="M9 8V2"/>
+                  <path d="M15 2v6"/>
+                  <path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/>
+                </svg>
+              </div>
+              <div class="device-meta">
+                <b>Living Room Smart Plug</b>
+                <small>TV & Audio · 5.2 hrs/day (~68 kWh)</small>
+              </div>
+              <div class="device-check">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Device 4: Refrigerator -->
+            <div class="device-card selected" onclick="toggleDevice(this)">
+              <div class="device-icon-wrapper">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="5" y="2" width="14" height="20" rx="2"/>
+                  <line x1="5" y1="10" x2="19" y2="10"/>
+                  <line x1="15" y1="6" x2="15" y2="8"/>
+                  <line x1="15" y1="14" x2="15" y2="16"/>
+                </svg>
+              </div>
+              <div class="device-meta">
+                <b>Inverter Refrigerator</b>
+                <small>Kitchen · 24 hrs continuous (~41 kWh)</small>
+              </div>
+              <div class="device-check">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="foot-actions">
+          <button type="button" class="btn btn-secondary" id="backToStep1Btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+            </svg>
+            <span>Back</span>
+          </button>
+          <button type="button" class="btn" id="nextToStep3Btn">
+            <span>Run Energy Disaggregation</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 3: DISAGGREGATION AUDIT -->
+      <div class="step-section" id="sectionStep3">
+        <div class="box">
+          <div class="box-head">
+            <div class="box-icon" style="background:#fef3c7;color:#b45309">
+              <!-- Zap/Bolt icon -->
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+              </svg>
+            </div>
+            <div>
+              <h3>Disaggregation & Telemetry Reconciliation Complete</h3>
+              <p>Reconciling total billed units against Google Home sub-metered appliances.</p>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px">
+            <div style="background:#f8fafc;padding:16px;border-radius:12px;border:1px solid #e2e8f0;text-align:center">
+              <span style="font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.04em">1. Total Bill (Macro)</span>
+              <strong style="display:block;font-size:24px;color:var(--ink);font-family:'Manrope',sans-serif;margin-top:4px" id="summaryBillKwh">684 kWh</strong>
+              <small style="color:var(--muted);font-size:11px">₹5,472 statement total</small>
+            </div>
+            <div style="background:#eff6ff;padding:16px;border-radius:12px;border:1px solid #bfdbfe;text-align:center">
+              <span style="font-size:10px;color:#1e40af;font-weight:700;text-transform:uppercase;letter-spacing:0.04em">2. Google Home (Micro)</span>
+              <strong style="display:block;font-size:24px;color:#1d4ed8;font-family:'Manrope',sans-serif;margin-top:4px" id="summarySmartKwh">451 kWh</strong>
+              <small style="color:#1e40af;font-size:11px">66% of tracked draw</small>
+            </div>
+            <div style="background:#fff7ed;padding:16px;border-radius:12px;border:1px solid #fed7aa;text-align:center">
+              <span style="font-size:10px;color:#c2410c;font-weight:700;text-transform:uppercase;letter-spacing:0.04em">3. Phantom Baseload</span>
+              <strong style="display:block;font-size:24px;color:#ea580c;font-family:'Manrope',sans-serif;margin-top:4px" id="summaryPhantomKwh">233 kWh</strong>
+              <small style="color:#c2410c;font-size:11px">~₹1,864 unmonitored loss</small>
+            </div>
+          </div>
+
+          <!-- Consumption visual bar -->
+          <div style="margin: 16px 0 20px;">
+            <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:600;color:var(--muted);margin-bottom:6px">
+              <span>Smart Appliance Draw (66%)</span>
+              <span>Phantom Baseload (34%)</span>
+            </div>
+            <div class="progress-bar-container">
+              <div class="progress-bar-fill-monitored"></div>
+              <div class="progress-bar-fill-phantom"></div>
+            </div>
+          </div>
+
+          <div style="padding:16px 18px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="16" x2="12" y2="12"/>
+                <line x1="12" y1="8" x2="12.01" y2="8"/>
+              </svg>
+              <b style="color:#166534;font-size:13px">Watt AI Initial Assessment</b>
+            </div>
+            <p style="margin:0;font-size:12px;color:#15803d;line-height:1.6">
+              Your Google Home AC and Water Heater account for the majority of peak consumption. However, your home registers <b>233 kWh in unmonitored baseline power</b>. In the dashboard, Watt will monitor these trends in real time and guide you through scheduled pre-cooling and vampire load shutoffs.
+            </p>
+          </div>
+        </div>
+
+        <div class="foot-actions">
+          <button type="button" class="btn btn-secondary" id="backToStep2Btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+            </svg>
+            <span>Back</span>
+          </button>
+          <button type="button" class="btn" id="finishOnboardingBtn" style="background:#15803d;font-size:13px;padding:13px 26px">
+            <span>Open Energy Dashboard</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Google ID Switch Modal -->
+  <div id="googleAccountModal" style="display:none;position:fixed;inset:0;background:rgba(17,29,23,0.5);z-index:99;display:none;place-items:center;padding:16px;">
+    <div style="width:min(100%,400px);background:white;border-radius:18px;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,0.15)">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <svg width="22" height="22" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+        </svg>
+        <h3 style="margin:0;font-size:16px;font-family:'Manrope',sans-serif">Sync Google Account</h3>
+      </div>
+      <p style="font-size:12px;color:var(--muted);margin:0 0 16px;line-height:1.5">
+        Enter your Google Account email. Google Home devices registered under this Google ID will be imported automatically via the Smart Device Management API.
+      </p>
+      <div style="margin-bottom:16px">
+        <label style="display:block;font-size:11px;font-weight:600;margin-bottom:6px;color:#334155">Google Account Email</label>
+        <input type="email" id="modalGoogleEmailInput" placeholder="you@gmail.com" style="width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:10px;font-size:13px;font-family:inherit;outline:none">
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:10px">
+        <button type="button" class="btn btn-secondary" id="modalGoogleCancelBtn" style="font-size:12px;padding:8px 16px">Cancel</button>
+        <button type="button" class="btn" id="modalGoogleSaveBtn" style="font-size:12px;padding:8px 16px">Link & Import</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function getGoogleProfile() {
+      var email = localStorage.getItem('homeEnergyEmail') || 'akshit@gmail.com';
+      var rawName = email.split('@')[0];
+      var prettyName = rawName.replace(/[._-]/g, ' ').replace(/\b\w/g, function(l){ return l.toUpperCase(); });
+      return { email: email, name: prettyName };
+    }
+
+    function syncGoogleUI() {
+      var prof = getGoogleProfile();
+      document.getElementById('welcomeGreeting').textContent = 'Connect your home energy, ' + prof.name;
+      document.getElementById('googleAccountName').textContent = prof.name + "'s Google Account";
+      document.getElementById('googleAccountEmail').textContent = prof.email + ' · Smart Device Management (SDM) API';
+      document.getElementById('homeStructureLabel').textContent = prof.name + "'s Google Home Structure";
+    }
+    syncGoogleUI();
+
+    // Switch Google ID Modal
+    var modal = document.getElementById('googleAccountModal');
+    document.getElementById('switchGoogleAccountBtn').onclick = function() {
+      var prof = getGoogleProfile();
+      document.getElementById('modalGoogleEmailInput').value = prof.email;
+      modal.style.display = 'grid';
+    };
+    document.getElementById('modalGoogleCancelBtn').onclick = function() {
+      modal.style.display = 'none';
+    };
+    document.getElementById('modalGoogleSaveBtn').onclick = function() {
+      var val = document.getElementById('modalGoogleEmailInput').value.trim();
+      if(val) {
+        localStorage.setItem('homeEnergyEmail', val);
+        localStorage.setItem('authProvider', 'google');
+        syncGoogleUI();
+      }
+      modal.style.display = 'none';
+    };
+
+    var currentKwh = 684;
+    var currentRate = 8.0;
+    var currentCost = 5472;
+
+    function setStep(step) {
+      document.querySelectorAll('.step-section').forEach(function(s){ s.classList.remove('active'); });
+      document.querySelectorAll('.step-pill').forEach(function(p){ p.classList.remove('active'); });
+      
+      document.getElementById('sectionStep' + step).classList.add('active');
+      for(var i = 1; i <= step; i++) {
+        document.getElementById('pill' + i).classList.add('active');
+      }
+    }
+
+    function toggleDevice(el) {
+      el.classList.toggle('selected');
+    }
+
+    // Step 1: Bill Scanning Logic
+    document.getElementById('useSampleBillBtn').onclick = function() {
+      var fb = document.getElementById('scanFeedback');
+      fb.style.display = 'block';
+      fb.textContent = 'Parsing Tata Power / BSES Bill…';
+      setTimeout(function(){
+        fb.style.display = 'none';
+        document.getElementById('billPreviewCard').style.display = 'block';
+        currentKwh = 684;
+        currentRate = 8.0;
+        currentCost = 5472;
+        updateSummary();
+      }, 600);
+    };
+
+    document.getElementById('onboardingFileInput').onchange = function(e) {
+      var f = e.target.files[0];
+      if(!f) return;
+      var fb = document.getElementById('scanFeedback');
+      fb.style.display = 'block';
+      fb.textContent = 'Reading ' + f.name + ' with OCR engine…';
+      setTimeout(function(){
+        fb.style.display = 'none';
+        document.getElementById('billPreviewCard').style.display = 'block';
+        currentKwh = 684 + Math.floor(Math.random() * 40);
+        currentCost = Math.round(currentKwh * currentRate);
+        document.getElementById('onboardKwh').textContent = currentKwh + ' kWh';
+        document.getElementById('onboardCost').textContent = '₹' + currentCost.toLocaleString();
+        updateSummary();
+      }, 900);
+    };
+
+    function updateSummary() {
+      var tracked = 451;
+      var phantom = Math.max(0, currentKwh - tracked);
+      document.getElementById('summaryBillKwh').textContent = currentKwh + ' kWh';
+      document.getElementById('summaryPhantomKwh').textContent = phantom + ' kWh';
+    }
+
+    document.getElementById('nextToStep2Btn').onclick = function() { setStep(2); };
+    document.getElementById('backToStep1Btn').onclick = function() { setStep(1); };
+    document.getElementById('nextToStep3Btn').onclick = function() { updateSummary(); setStep(3); };
+    document.getElementById('backToStep2Btn').onclick = function() { setStep(2); };
+
+    document.getElementById('finishOnboardingBtn').onclick = function() {
+      localStorage.setItem('homeRate', currentRate);
+      localStorage.setItem('homeFactor', 0.73);
+      
+      var profile = {};
+      try { profile = JSON.parse(localStorage.getItem('energyCoachProfile') || '{}'); } catch(e){}
+      profile.monthlyKwh = currentKwh;
+      profile.tariff = currentRate;
+      profile.acHours = 4;
+      profile.waterMinutes = 25;
+      localStorage.setItem('energyCoachProfile', JSON.stringify(profile));
+      localStorage.setItem('onboardingComplete', 'true');
+      
+      window.location.replace('Home-Energy-Carbon-Manager.html');
+    };
+  </script>
+</body>
+</html>
