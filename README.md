@@ -59,3 +59,9 @@ This repository includes a Vercel Python function at `/api/ai/deepseek/chat` tha
 The deployed site on Vercel calls its own API automatically. To keep using the GitHub Pages site, enter the Vercel project URL in the coach's **Live AI backend URL** field and enable **Use live AI for answers**. The API allows the GitHub Pages origin by default. Vercel deployment URLs are allowed automatically.
 
 The function uses `gemini-3.5-flash-lite` by default and accepts `GEMINI_MODEL` to override it. Its in-memory rate limit is best-effort on serverless instances; monitor AI usage for a public demo. See [Vercel Python Functions](https://vercel.com/docs/functions/runtimes/python), [Vercel environment variables](https://vercel.com/docs/environment-variables), and [Gemini models](https://ai.google.dev/gemini-api/docs/models).
+
+## Landing page and demo login
+
+The Vercel project opens at `index.html`, which is the public landing page. The **Open dashboard** buttons lead to `login.html`. Entering an email creates a browser-local demo session and opens `Home-Energy-Carbon-Manager.html`; the dashboard includes a Log out button. This is a navigation demo, not secure account authentication. Google and Apple sign-in are not configured.
+
+When updating the existing GitHub repository, upload/replace `index.html` and `Home-Energy-Carbon-Manager.html`, and add the new `login.html` at the same repository root. Vercel will redeploy after the commit finishes.
