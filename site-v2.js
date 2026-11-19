@@ -1,5 +1,5 @@
 (() => {
-  const revealItems = Array.from(document.querySelectorAll("[data-reveal]"));
+  const revealItems = Array.from(document.querySelectorAll("[data-reveal], [data-text-reveal]"));
   const textItems = Array.from(document.querySelectorAll("[data-text-reveal]"));
   const prefersLessMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
