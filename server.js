@@ -2,9 +2,14 @@ const http = require('http');
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
+const { disaggregateBill } = require('./services/disaggregation');
+const { syncTuyaAccount, registerTuyaSubscription, initBackgroundSyncWorker } = require('./services/tuyaService');
 
 const PORT = 3000;
 const PUBLIC_DIR = __dirname;
+
+// Start periodic 6-hour background sync worker for linked Tuya accounts
+initBackgroundSyncWorker();
 
 // Conversational Intelligence Engine with Multi-Turn Memory & Domain Knowledge
 function generateSmartAgentResponse(messages, context) {
@@ -28,6 +33,23 @@ function generateSmartAgentResponse(messages, context) {
   const q = rawQuery.toLowerCase();
 
   // Natural conversational multi-turn responses:
+
+  // Normalized Telemetry Hook (Tier 1 Weather NILM or Tier 2 Tuya Cloud Sync)
+  const ingestion = context.ingestion_data || profile.ingestion;
+  if (ingestion && (/appliance|tuya|disaggregat|breakdown|where.*energy|usage|cycle|peak/i.test(q))) {
+    const summary = ingestion.summary || {};
+    const apps = ingestion.appliances || [];
+    const acApp = apps.find(a => a.category === 'cooling') || apps[0] || {};
+    const geyserApp = apps.find(a => a.category === 'heating') || apps[1] || {};
+    return `### Normalized Appliance Telemetry (${summary.sync_source || 'Ingestion Engine'})
+**Monthly Baseline:** **${summary.total_kwh} kWh** (~₹${Number(summary.total_cost || estBill).toLocaleString()}) | **${summary.total_co2_kg} kg CO₂e** (India CEA 0.675 kg CO₂/kWh).
+
+1. **${acApp.name || 'Split AC'}:** **${acApp.kwh} kWh** across **${acApp.runtime_hours} hrs** (${acApp.on_count} total cycles).
+   - **Peak Window Impact:** **${acApp.peak_cycles || 0} cycles** occurred during 18:00–23:00 evening peaker hours.
+   - **Cost & Carbon:** ₹${acApp.cost} (~${acApp.co2_kg} kg CO₂e). Shifting 1.5 hrs daily into the pre-cooling window trims ~₹${Math.round(acApp.cost * 0.22)}/month!
+2. **${geyserApp.name || 'Water Geyser'}:** **${geyserApp.kwh} kWh** (${geyserApp.runtime_hours} hrs, ${geyserApp.on_count} cycles, costing ₹${geyserApp.cost}).
+3. **Sync Integrity:** Verified via **${summary.sync_source}** ${summary.tuya_uid ? `(Tuya UID: ${summary.tuya_uid})` : `(Open-Meteo ${summary.city || 'Weather'} CDD: ${summary.cooling_degree_days || 0})`}.`;
+  }
 
   // 1. Simple Conversational Inquiries & Assistance
   if (/^(can you help|help me|what can you do|how can you help|assist me|who are you)/i.test(q)) {
@@ -431,12 +453,78 @@ function handleChat(req, res) {
   });
 }
 
+// Ingestion Endpoint 1: Tier 1 - Weather-Aware Bill Disaggregation
+async function handleIngestBill(req, res) {
+  if (req.method !== 'POST') {
+    res.writeHead(405, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: 'Method Not Allowed' }));
+    return;
+  }
+
+  let body = '';
+  req.on('data', chunk => body += chunk);
+  req.on('end', async () => {
+    try {
+      const data = body ? JSON.parse(body) : {};
+      const result = await disaggregateBill(data);
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: true, data: result }));
+    } catch (err) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Failed to disaggregate bill: ' + err.message }));
+    }
+  });
+}
+
+// Ingestion Endpoint 2: Tier 2 - Tuya / Smart Life Cloud Auto-Sync
+async function handleIngestTuya(req, res) {
+  if (req.method !== 'POST') {
+    res.writeHead(405, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: 'Method Not Allowed' }));
+    return;
+  }
+
+  let body = '';
+  req.on('data', chunk => body += chunk);
+  req.on('end', async () => {
+    try {
+      const data = body ? JSON.parse(body) : {};
+      const tuyaUid = data.tuya_uid || 'tuya_user_98412';
+      const result = await syncTuyaAccount(tuyaUid, {
+        total_kwh: data.bill_kwh || 480,
+        total_amount: data.bill_amount || 3840
+      });
+      registerTuyaSubscription(tuyaUid, {
+        total_kwh: data.bill_kwh || 480,
+        total_amount: data.bill_amount || 3840
+      });
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: true, data: result }));
+    } catch (err) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Failed to sync Tuya account: ' + err.message }));
+    }
+  });
+}
+
 const server = http.createServer((req, res) => {
   let reqPath = decodeURI(req.url.split('?')[0]);
   
   // API Route for AI Chat
   if (reqPath === '/api/ai/deepseek/chat') {
     handleChat(req, res);
+    return;
+  }
+
+  // API Route for Tier 1: Bill Upload & Weather Disaggregation
+  if (reqPath === '/api/ingest/bill') {
+    handleIngestBill(req, res);
+    return;
+  }
+
+  // API Route for Tier 2: Tuya / Smart Life Cloud Auto-Sync
+  if (reqPath === '/api/ingest/tuya') {
+    handleIngestTuya(req, res);
     return;
   }
 

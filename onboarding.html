@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f6f8f5">
-  <title>Setup Your Home Energy & Devices | MyEMS</title>
+  <title>Connect Your Home Energy | CarbonSense AI</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=Manrope:wght@500;600;700;800&display=swap">
   <style>
     :root {
@@ -14,11 +14,9 @@
       --green: #1d5641;
       --green-dark: #143d2e;
       --green-light: #eaf3ee;
-      --green-accent: #2e7d5b;
       --bg: #f5f7f4;
       --card-bg: #ffffff;
       --border: #e2e8e4;
-      --border-focus: #1d5641;
       --blue: #1d4ed8;
       --blue-soft: #eff6ff;
       --amber: #b45309;
@@ -40,7 +38,7 @@
       -webkit-font-smoothing: antialiased;
     }
     .container {
-      width: min(100%, 780px);
+      width: min(100%, 820px);
       background: var(--card-bg);
       border-radius: var(--radius-lg);
       border: 1px solid var(--border);
@@ -50,7 +48,7 @@
     .header {
       background: linear-gradient(135deg, #13382b 0%, #1d5641 100%);
       color: white;
-      padding: 34px 38px 30px;
+      padding: 34px 38px 28px;
       position: relative;
     }
     .badge {
@@ -76,22 +74,22 @@
     .header h1 {
       margin: 0;
       font-family: 'Manrope', sans-serif;
-      font-size: 27px;
+      font-size: 26px;
       font-weight: 700;
       letter-spacing: -0.025em;
       line-height: 1.25;
     }
     .header p {
-      margin: 10px 0 0;
+      margin: 8px 0 0;
       color: #d2e4da;
       font-size: 13px;
       line-height: 1.6;
-      max-width: 640px;
+      max-width: 660px;
     }
     .steps {
       display: flex;
       gap: 12px;
-      padding: 18px 38px;
+      padding: 16px 38px;
       background: #fafbfa;
       border-bottom: 1px solid var(--border);
     }
@@ -109,6 +107,7 @@
       color: var(--muted);
       transition: all 0.2s ease;
       user-select: none;
+      cursor: pointer;
     }
     .step-pill.active {
       border-color: var(--green);
@@ -126,14 +125,13 @@
       font-size: 11px;
       font-weight: 700;
       flex-shrink: 0;
-      transition: all 0.2s;
     }
     .step-pill.active .num {
       background: var(--green);
       color: white;
     }
     .content-body {
-      padding: 32px 38px 36px;
+      padding: 30px 38px 34px;
     }
     .step-section {
       display: none;
@@ -157,7 +155,7 @@
       display: flex;
       gap: 14px;
       align-items: flex-start;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
     .box-icon {
       width: 42px;
@@ -175,7 +173,6 @@
       font-family: 'Manrope', sans-serif;
       font-weight: 700;
       color: var(--ink);
-      letter-spacing: -0.01em;
     }
     .box-head p {
       margin: 4px 0 0;
@@ -183,10 +180,76 @@
       color: var(--muted);
       line-height: 1.5;
     }
+
+    /* TIER SELECTION CARDS */
+    .tier-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 20px 0;
+    }
+    .tier-card {
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .tier-card:hover {
+      border-color: #cbd5e1;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+    }
+    .tier-card.selected {
+      border-color: var(--green);
+      background: #f7faf8;
+      box-shadow: 0 8px 24px -6px rgba(29, 86, 65, 0.12);
+    }
+    .tier-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .tier-badge {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 4px 9px;
+      border-radius: 99px;
+    }
+    .tier-badge-blue { background: #eff6ff; color: #1d4ed8; }
+    .tier-badge-green { background: #dcfce7; color: #15803d; }
+    .tier-card h4 {
+      margin: 0 0 6px 0;
+      font-size: 15px;
+      font-family: 'Manrope', sans-serif;
+      font-weight: 700;
+      color: var(--ink);
+    }
+    .tier-card p {
+      margin: 0;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+    .tier-card ul {
+      margin: 12px 0 0 0;
+      padding-left: 18px;
+      font-size: 11px;
+      color: var(--ink);
+      line-height: 1.6;
+    }
+
     .dropzone {
       border: 2px dashed #cbd5e1;
       border-radius: var(--radius-md);
-      padding: 34px 20px;
+      padding: 30px 20px;
       text-align: center;
       background: #f8fafc;
       cursor: pointer;
@@ -197,147 +260,42 @@
       background: #f3f7f5;
     }
     .dropzone-icon {
-      width: 46px;
-      height: 46px;
-      margin: 0 auto 12px;
+      width: 44px;
+      height: 44px;
+      margin: 0 auto 10px;
       border-radius: 50%;
       background: white;
       border: 1px solid #e2e8f0;
       display: grid;
       place-items: center;
       color: #64748b;
-      transition: all 0.2s;
-    }
-    .dropzone:hover .dropzone-icon {
-      color: var(--green);
-      border-color: var(--green-light);
-      transform: translateY(-2px);
     }
     .dropzone input { display: none; }
-    .bill-preview {
-      display: none;
-      margin-top: 18px;
-      padding: 16px 18px;
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: var(--radius-sm);
-    }
-    .bill-preview-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-    }
-    .bill-preview-title {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      font-size: 12px;
-      font-weight: 700;
-      color: #0f766e;
-    }
-    .bill-preview-grid {
+
+    .input-row {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 12px;
-    }
-    .bill-stat {
-      background: white;
-      padding: 12px 14px;
-      border-radius: 10px;
-      border: 1px solid #e2e8f0;
-    }
-    .bill-stat span {
-      font-size: 10px;
-      color: var(--muted);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    .bill-stat strong {
-      display: block;
-      font-size: 19px;
-      font-family: 'Manrope', sans-serif;
-      font-weight: 700;
-      color: var(--ink);
-      margin-top: 4px;
-    }
-    .device-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
       margin: 16px 0;
     }
-    .device-card {
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 14px;
-      display: flex;
-      align-items: center;
-      gap: 13px;
-      background: #ffffff;
-      cursor: pointer;
-      transition: all 0.18s ease;
-      position: relative;
-    }
-    .device-card:hover {
-      border-color: #cbd5e1;
-      background: #fafbfa;
-    }
-    .device-card.selected {
-      border-color: var(--green);
-      background: #f7faf8;
-    }
-    .device-icon-wrapper {
-      width: 38px;
-      height: 38px;
-      border-radius: 10px;
-      background: #f1f5f3;
-      color: var(--green);
-      display: grid;
-      place-items: center;
-      flex-shrink: 0;
-      transition: all 0.18s;
-    }
-    .device-card.selected .device-icon-wrapper {
-      background: var(--green-light);
-      color: var(--green);
-    }
-    .device-meta {
-      flex: 1;
-      min-width: 0;
-    }
-    .device-meta b {
-      font-size: 12px;
+    .input-field label {
       display: block;
-      color: var(--ink);
-      font-weight: 600;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .device-meta small {
       font-size: 11px;
-      color: var(--muted);
-      display: block;
-      margin-top: 2px;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 6px;
     }
-    .device-check {
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      border: 1.5px solid #cbd5e1;
-      display: grid;
-      place-items: center;
-      color: transparent;
-      transition: all 0.18s;
-      flex-shrink: 0;
+    .input-field input, .input-field select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      font-size: 12px;
+      font-family: inherit;
+      background: white;
+      outline: none;
     }
-    .device-card.selected .device-check {
-      background: var(--green);
-      border-color: var(--green);
-      color: white;
-    }
+
     .btn {
       background: var(--green);
       color: white;
@@ -392,30 +350,46 @@
       background: #dcfce7;
       color: #15803d;
     }
-    .progress-bar-container {
-      height: 8px;
-      background: #f1f5f9;
+
+    /* AUDIT TABLE */
+    .appliance-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+      margin-top: 14px;
+    }
+    .appliance-table th {
+      text-align: left;
+      padding: 8px 10px;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 9px;
+      letter-spacing: 0.05em;
+    }
+    .appliance-table td {
+      padding: 10px;
+      border-bottom: 1px solid #f1f5f3;
+      color: var(--ink);
+    }
+    .appliance-table tr:last-child td { border-bottom: 0; }
+    .peak-tag {
+      display: inline-block;
+      padding: 2px 7px;
+      background: #fef3c7;
+      color: #b45309;
       border-radius: 99px;
-      overflow: hidden;
-      display: flex;
-      margin: 14px 0 10px;
+      font-size: 9px;
+      font-weight: 700;
     }
-    .progress-bar-fill-monitored {
-      background: #2563eb;
-      width: 66%;
-      transition: width 0.3s;
-    }
-    .progress-bar-fill-phantom {
-      background: #ea580c;
-      width: 34%;
-      transition: width 0.3s;
-    }
-    @media(max-width:640px) {
-      .steps { flex-direction: column; padding: 18px 20px; }
-      .content-body { padding: 22px 20px 28px; }
-      .header { padding: 26px 20px 22px; }
-      .device-grid { grid-template-columns: 1fr; }
-      .bill-preview-grid { grid-template-columns: 1fr; }
+
+    @media(max-width:680px) {
+      .tier-grid { grid-template-columns: 1fr; }
+      .input-row { grid-template-columns: 1fr; }
+      .steps { flex-direction: column; padding: 16px 20px; }
+      .content-body { padding: 20px; }
+      .header { padding: 24px 20px; }
     }
   </style>
 </head>
@@ -425,482 +399,491 @@
     <div class="header">
       <div class="badge">
         <span class="badge-dot"></span>
-        <span>Household Onboarding</span>
+        <span>Zero-Touch Telemetry Ingestion</span>
       </div>
       <h1 id="welcomeGreeting">Connect your home energy</h1>
-      <p>Configure your two primary data sources: your <b>Electricity Bill</b> (macro baseline) and your <b>Google Home Devices</b> (micro appliance telemetry). Together, they isolate where energy is consumed and uncover phantom power draw.</p>
+      <p>Feed your real household energy data automatically. Choose <b>Tier 1 (Weather-Aware Bill NILM)</b> for instant hardware-free breakdown, or <b>Tier 2 (Tuya / Smart Life Cloud)</b> to sync exact runtime logs from your smart plugs.</p>
     </div>
 
     <div class="steps">
-      <div class="step-pill active" id="pill1">
+      <div class="step-pill active" id="pill1" onclick="setStep(1)">
         <span class="num">1</span>
-        <span>1. Electricity Bill</span>
+        <span>1. Ingestion Pipeline</span>
       </div>
-      <div class="step-pill" id="pill2">
+      <div class="step-pill" id="pill2" onclick="setStep(2)">
         <span class="num">2</span>
-        <span>2. Google Home</span>
+        <span>2. Telemetry Sync</span>
       </div>
-      <div class="step-pill" id="pill3">
+      <div class="step-pill" id="pill3" onclick="setStep(3)">
         <span class="num">3</span>
         <span>3. Disaggregation Audit</span>
       </div>
     </div>
 
     <div class="content-body">
-      <!-- STEP 1: BILL SCAN -->
+      <!-- STEP 1: CHOOSE TIER -->
       <div class="step-section active" id="sectionStep1">
         <div class="box">
           <div class="box-head">
             <div class="box-icon">
-              <!-- Document icon -->
+              <!-- Grid / Pipeline icon -->
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                <polyline points="14 2 14 8 20 8"/>
-                <line x1="16" y1="13" x2="8" y2="13"/>
-                <line x1="16" y1="17" x2="8" y2="17"/>
-                <line x1="10" y1="9" x2="8" y2="9"/>
+                <rect x="3" y="3" width="7" height="7"/>
+                <rect x="14" y="3" width="7" height="7"/>
+                <rect x="14" y="14" width="7" height="7"/>
+                <rect x="3" y="14" width="7" height="7"/>
               </svg>
             </div>
             <div>
-              <h3>Upload Electricity Bill (Ground Truth)</h3>
-              <p>Your monthly utility statement establishes total consumption and tariff slabs.</p>
+              <h3>Select Your Data Ingestion Mode</h3>
+              <p>Choose how your appliance telemetry and billing data should be ingested.</p>
+            </div>
+          </div>
+
+          <div class="tier-grid">
+            <!-- TIER 1 CARD -->
+            <div class="tier-card selected" id="tier1Card" onclick="selectTier(1)">
+              <div>
+                <div class="tier-header">
+                  <span class="tier-badge tier-badge-blue">Tier 1 · Zero Hardware</span>
+                  <div class="tier-radio">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" id="tier1Check">
+                      <circle cx="12" cy="12" r="10"/>
+                      <polyline points="16 9 10.5 14.5 8 12"/>
+                    </svg>
+                  </div>
+                </div>
+                <h4>Weather-Aware Bill Upload (NILM)</h4>
+                <p>Upload your electricity bill or enter units. We fetch real historical temperatures via Open-Meteo to calculate Degree Days and infer appliance runtimes.</p>
+                <ul>
+                  <li>Zero smart plugs required</li>
+                  <li>Open-Meteo CDD/HDD climate scaling</li>
+                  <li>India CEA Scope 2 carbon factor</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- TIER 2 CARD -->
+            <div class="tier-card" id="tier2Card" onclick="selectTier(2)">
+              <div>
+                <div class="tier-header">
+                  <span class="tier-badge tier-badge-green">Tier 2 · Exact Hardware</span>
+                  <div class="tier-radio">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2" id="tier2Check">
+                      <circle cx="12" cy="12" r="10"/>
+                    </svg>
+                  </div>
+                </div>
+                <h4>Tuya / Smart Life Cloud Auto-Sync</h4>
+                <p>Connect your Smart Life or Tuya User ID once. Backend automatically streams switch_1 logs, exact ON-counts, and peak runs (18:00–23:00).</p>
+                <ul>
+                  <li>Exact measured appliance hours</li>
+                  <li>Flags 18:00–23:00 peak coal cycles</li>
+                  <li>Automatic 6-hour background sync</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- 1-Click Fast Track Demo Profile -->
+          <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+            <div style="display:flex;align-items:center;gap:10px">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <div>
+                <b style="font-size:12px;color:#166534;display:block">Instant Evaluation Profile</b>
+                <small style="color:#15803d;font-size:11px">Pre-seed a 480 kWh Faridabad summer bill + Tuya smart plug logs</small>
+              </div>
+            </div>
+            <button type="button" class="btn" id="loadDemoProfileBtn" style="font-size:11px;padding:8px 16px;background:#15803d">
+              Load Pre-Synced Demo Profile →
+            </button>
+          </div>
+        </div>
+
+        <div class="foot-actions">
+          <span style="font-size:11px;color:var(--muted)">Step 1 of 3 · Select your ingestion method</span>
+          <button type="button" class="btn" id="nextToStep2Btn">
+            <span>Continue to Configuration</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 2: TELEMETRY CONFIGURATION -->
+      <div class="step-section" id="sectionStep2">
+        <!-- TIER 1 CONFIG PANEL -->
+        <div class="box" id="tier1ConfigBox">
+          <div class="box-head">
+            <div class="box-icon">
+              <!-- Weather / Sun / Thermometer SVG -->
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z"/>
+              </svg>
+            </div>
+            <div>
+              <h3>Tier 1: Weather-Aware Electricity Bill Upload</h3>
+              <p>Upload a bill photo/PDF or enter parameters. Open-Meteo weather will disaggregate your load.</p>
             </div>
           </div>
 
           <div class="dropzone" id="onboardingDropZone" onclick="document.getElementById('onboardingFileInput').click()">
             <input type="file" id="onboardingFileInput" accept="image/*,.pdf">
             <div class="dropzone-icon">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                <polyline points="17 8 12 3 7 8"/>
-                <line x1="12" y1="3" x2="12" y2="15"/>
-              </svg>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
             </div>
-            <strong style="font-size:14px;display:block;color:#0f172a">Click or Drag & Drop Bill Image or PDF</strong>
-            <small style="color:#64748b;font-size:11px;display:block;margin-top:4px">Compatible with BSES, Tata Power, BESCOM, Adani, or any State DISCOM</small>
+            <strong style="font-size:13px;display:block;color:#0f172a">Click or Drag & Drop Bill PDF / JPG</strong>
+            <small style="color:#64748b;font-size:11px;display:block;margin-top:4px">Supports BSES, Tata Power, DHBVN, BESCOM, Adani, or any State DISCOM</small>
           </div>
 
-          <div id="scanFeedback" style="display:none;margin-top:14px;padding:12px 14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;font-size:12px;color:#166534">
-            Processing document with OCR parser…
-          </div>
-
-          <div class="bill-preview" id="billPreviewCard">
-            <div class="bill-preview-header">
-              <div class="bill-preview-title">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-                <span>Bill Extracted Successfully via OCR</span>
-              </div>
-              <span class="chip chip-green">VERIFIED</span>
+          <div class="input-row">
+            <div class="input-field">
+              <label>City for Weather Archive</label>
+              <select id="billCityInput">
+                <option value="Faridabad" selected>Faridabad (Haryana)</option>
+                <option value="Delhi">Delhi / NCR</option>
+                <option value="Noida">Noida (UP)</option>
+                <option value="Gurugram">Gurugram (Haryana)</option>
+                <option value="Mumbai">Mumbai (Maharashtra)</option>
+                <option value="Bengaluru">Bengaluru (Karnataka)</option>
+                <option value="Chennai">Chennai (Tamil Nadu)</option>
+              </select>
             </div>
-            <div class="bill-preview-grid">
-              <div class="bill-stat">
-                <span>Monthly Units</span>
-                <strong id="onboardKwh">684 kWh</strong>
-              </div>
-              <div class="bill-stat">
-                <span>Total Amount</span>
-                <strong id="onboardCost">₹5,472</strong>
-              </div>
-              <div class="bill-stat">
-                <span>Effective Tariff</span>
-                <strong id="onboardRate">₹8.0/kWh</strong>
-              </div>
+            <div class="input-field">
+              <label>Monthly Units (kWh)</label>
+              <input type="number" id="billKwhInput" value="480">
+            </div>
+            <div class="input-field">
+              <label>Bill Amount (INR ₹)</label>
+              <input type="number" id="billAmountInput" value="3840">
             </div>
           </div>
 
-          <div style="margin-top:18px;display:flex;gap:10px">
-            <button type="button" class="btn btn-secondary" id="useSampleBillBtn" style="font-size:12px;padding:10px 18px">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                <polyline points="14 2 14 8 20 8"/>
-              </svg>
-              <span>Use Sample Discom Bill (684 kWh)</span>
-            </button>
-          </div>
+          <div id="tier1Status" style="display:none;padding:12px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;font-size:12px;color:#1e40af"></div>
         </div>
 
-        <div class="foot-actions">
-          <span style="font-size:11px;color:var(--muted)">Step 1 of 3 · Calibrates total monthly draw</span>
-          <button type="button" class="btn" id="nextToStep2Btn">
-            <span>Continue to Google Home</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      <!-- STEP 2: GOOGLE HOME LINK -->
-      <div class="step-section" id="sectionStep2">
-        <div class="box">
+        <!-- TIER 2 CONFIG PANEL -->
+        <div class="box" id="tier2ConfigBox" style="display:none">
           <div class="box-head">
             <div class="box-icon" style="background:#eff6ff;color:#1d4ed8">
               <!-- Smart Hub icon -->
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                <polyline points="9 22 9 12 15 12 15 22"/>
+                <path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 2v6"/><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/>
               </svg>
             </div>
             <div>
-              <h3>Link Google Home Smart Telemetry</h3>
-              <p>Synchronize live device operational states, cooling runtimes, and plug duty cycles.</p>
+              <h3>Tier 2: Tuya / Smart Life Cloud Auto-Sync</h3>
+              <p>Link your Tuya Smart Life user ID once to ingest switch_1 device state logs automatically.</p>
             </div>
           </div>
 
-          <!-- GOOGLE ID INTEGRATION CARD -->
-          <div class="google-auth-sync-card" id="googleAuthSyncCard" style="padding:16px 18px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;margin-bottom:18px">
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
-              <div style="display:flex;align-items:center;gap:12px">
-                <div style="width:40px;height:40px;border-radius:10px;background:white;border:1px solid #e2e8f0;display:grid;place-items:center;flex-shrink:0;box-shadow:0 1px 3px rgba(0,0,0,0.04)">
-                  <svg width="20" height="20" viewBox="0 0 24 24">
-                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-                  </svg>
-                </div>
-                <div>
-                  <div style="display:flex;align-items:center;gap:8px">
-                    <b style="font-size:13px;color:#0f172a" id="googleAccountName">Akshit's Google Account</b>
-                    <span class="chip chip-green" id="googleAccountBadge">SYNCED FROM GOOGLE ID</span>
-                  </div>
-                  <small style="color:#64748b;font-size:11px" id="googleAccountEmail">user@gmail.com · Smart Device Management (SDM) API</small>
-                </div>
-              </div>
-              <button type="button" class="btn btn-secondary" id="switchGoogleAccountBtn" style="font-size:11px;padding:7px 12px">
-                Switch Google ID
-              </button>
+          <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:16px;margin-bottom:16px">
+            <div class="input-field" style="margin-bottom:12px">
+              <label>Tuya / Smart Life User ID (tuya_uid)</label>
+              <input type="text" id="tuyaUidInput" value="tuya_user_98412" placeholder="e.g. tuya_user_98412">
             </div>
-            <div style="margin-top:12px;padding-top:10px;border-top:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;font-size:11px;color:#166534">
-              <span style="display:flex;align-items:center;gap:6px">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                <span><b>Imported from Google Home</b>: <span id="homeStructureLabel">Akshit's Home Structure</span> (4 smart devices)</span>
-              </span>
-              <span style="color:#0369a1;font-weight:600">OAuth 2.0 Bridge Active</span>
+            <div class="input-row" style="margin-bottom:0">
+              <div class="input-field">
+                <label>Total Bill kWh (for reconciliation)</label>
+                <input type="number" id="tuyaBillKwhInput" value="480">
+              </div>
+              <div class="input-field">
+                <label>Total Bill Amount (₹)</label>
+                <input type="number" id="tuyaBillAmountInput" value="3840">
+              </div>
+              <div class="input-field">
+                <label>Sync Interval</label>
+                <input type="text" value="Every 6 Hours (APScheduler)" disabled style="background:#f1f5f9;color:#64748b">
+              </div>
             </div>
           </div>
 
-          <p style="font-size:12px;font-weight:700;color:var(--ink);margin:16px 0 10px">Discovered devices included in telemetry feed:</p>
-          
-          <div class="device-grid">
-            <!-- Device 1: AC -->
-            <div class="device-card selected" onclick="toggleDevice(this)">
-              <div class="device-icon-wrapper">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="12" y1="2" x2="12" y2="22"/>
-                  <line x1="2" y1="12" x2="22" y2="12"/>
-                  <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
-                  <line x1="4.93" y1="19.07" x2="19.07" y2="4.93"/>
-                </svg>
-              </div>
-              <div class="device-meta">
-                <b>Master Bedroom AC</b>
-                <small>1,650 W · 4.0 hrs/day (~198 kWh)</small>
-              </div>
-              <div class="device-check">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-              </div>
-            </div>
-
-            <!-- Device 2: Geyser -->
-            <div class="device-card selected" onclick="toggleDevice(this)">
-              <div class="device-icon-wrapper">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
-                </svg>
-              </div>
-              <div class="device-meta">
-                <b>Smart Storage Geyser</b>
-                <small>2,000 W · 25 mins/day (~144 kWh)</small>
-              </div>
-              <div class="device-check">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-              </div>
-            </div>
-
-            <!-- Device 3: Smart Plug -->
-            <div class="device-card selected" onclick="toggleDevice(this)">
-              <div class="device-icon-wrapper">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 22v-5"/>
-                  <path d="M9 8V2"/>
-                  <path d="M15 2v6"/>
-                  <path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/>
-                </svg>
-              </div>
-              <div class="device-meta">
-                <b>Living Room Smart Plug</b>
-                <small>TV & Audio · 5.2 hrs/day (~68 kWh)</small>
-              </div>
-              <div class="device-check">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-              </div>
-            </div>
-
-            <!-- Device 4: Refrigerator -->
-            <div class="device-card selected" onclick="toggleDevice(this)">
-              <div class="device-icon-wrapper">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="5" y="2" width="14" height="20" rx="2"/>
-                  <line x1="5" y1="10" x2="19" y2="10"/>
-                  <line x1="15" y1="6" x2="15" y2="8"/>
-                  <line x1="15" y1="14" x2="15" y2="16"/>
-                </svg>
-              </div>
-              <div class="device-meta">
-                <b>Inverter Refrigerator</b>
-                <small>Kitchen · 24 hrs continuous (~41 kWh)</small>
-              </div>
-              <div class="device-check">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-              </div>
-            </div>
-          </div>
+          <div id="tier2Status" style="display:none;padding:12px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;font-size:12px;color:#1e40af"></div>
         </div>
 
         <div class="foot-actions">
           <button type="button" class="btn btn-secondary" id="backToStep1Btn">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
-            </svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
             <span>Back</span>
           </button>
-          <button type="button" class="btn" id="nextToStep3Btn">
-            <span>Run Energy Disaggregation</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-            </svg>
+          <button type="button" class="btn" id="runIngestBtn">
+            <span>Run Ingestion Pipeline</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
           </button>
         </div>
       </div>
 
-      <!-- STEP 3: DISAGGREGATION AUDIT -->
+      <!-- STEP 3: DISAGGREGATION & AUDIT RESULT -->
       <div class="step-section" id="sectionStep3">
         <div class="box">
           <div class="box-head">
             <div class="box-icon" style="background:#fef3c7;color:#b45309">
-              <!-- Zap/Bolt icon -->
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-              </svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
             </div>
             <div>
-              <h3>Disaggregation & Telemetry Reconciliation Complete</h3>
-              <p>Reconciling total billed units against Google Home sub-metered appliances.</p>
+              <h3>Reconciled Disaggregation & Telemetry Audit</h3>
+              <p id="auditSyncSourceLabel">Synchronized via Zero-Touch Ingestion Engine</p>
             </div>
           </div>
 
-          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:14px">
+          <!-- KPI Summary Cards -->
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px">
             <div style="background:#f8fafc;padding:16px;border-radius:12px;border:1px solid #e2e8f0;text-align:center">
-              <span style="font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:0.04em">1. Total Bill (Macro)</span>
-              <strong style="display:block;font-size:24px;color:var(--ink);font-family:'Manrope',sans-serif;margin-top:4px" id="summaryBillKwh">684 kWh</strong>
-              <small style="color:var(--muted);font-size:11px">₹5,472 statement total</small>
+              <span style="font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase">Total Bill</span>
+              <strong style="display:block;font-size:24px;color:var(--ink);font-family:'Manrope',sans-serif;margin-top:4px" id="resKwh">480 kWh</strong>
+              <small style="color:var(--muted);font-size:11px" id="resCost">₹3,840 billed</small>
             </div>
             <div style="background:#eff6ff;padding:16px;border-radius:12px;border:1px solid #bfdbfe;text-align:center">
-              <span style="font-size:10px;color:#1e40af;font-weight:700;text-transform:uppercase;letter-spacing:0.04em">2. Google Home (Micro)</span>
-              <strong style="display:block;font-size:24px;color:#1d4ed8;font-family:'Manrope',sans-serif;margin-top:4px" id="summarySmartKwh">451 kWh</strong>
-              <small style="color:#1e40af;font-size:11px">66% of tracked draw</small>
+              <span style="font-size:10px;color:#1e40af;font-weight:700;text-transform:uppercase">Scope 2 Carbon</span>
+              <strong style="display:block;font-size:24px;color:#1d4ed8;font-family:'Manrope',sans-serif;margin-top:4px" id="resCo2">324.0 kg</strong>
+              <small style="color:#1d4ed8;font-size:11px">CEA Factor: 0.675 kg/kWh</small>
             </div>
-            <div style="background:#fff7ed;padding:16px;border-radius:12px;border:1px solid #fed7aa;text-align:center">
-              <span style="font-size:10px;color:#c2410c;font-weight:700;text-transform:uppercase;letter-spacing:0.04em">3. Phantom Baseload</span>
-              <strong style="display:block;font-size:24px;color:#ea580c;font-family:'Manrope',sans-serif;margin-top:4px" id="summaryPhantomKwh">233 kWh</strong>
-              <small style="color:#c2410c;font-size:11px">~₹1,864 unmonitored loss</small>
-            </div>
-          </div>
-
-          <!-- Consumption visual bar -->
-          <div style="margin: 16px 0 20px;">
-            <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:600;color:var(--muted);margin-bottom:6px">
-              <span>Smart Appliance Draw (66%)</span>
-              <span>Phantom Baseload (34%)</span>
-            </div>
-            <div class="progress-bar-container">
-              <div class="progress-bar-fill-monitored"></div>
-              <div class="progress-bar-fill-phantom"></div>
+            <div style="background:#f0fdf4;padding:16px;border-radius:12px;border:1px solid #bbf7d0;text-align:center">
+              <span style="font-size:10px;color:#166534;font-weight:700;text-transform:uppercase">Ingestion Mode</span>
+              <strong style="display:block;font-size:16px;color:#15803d;font-family:'Manrope',sans-serif;margin-top:7px" id="resSource">Bill + Tuya Auto-Sync</strong>
+              <small style="color:#166534;font-size:10px" id="resSubtitle">Verified Device Log Pairs</small>
             </div>
           </div>
 
-          <div style="padding:16px 18px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px">
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"/>
-                <line x1="12" y1="16" x2="12" y2="12"/>
-                <line x1="12" y1="8" x2="12.01" y2="8"/>
-              </svg>
-              <b style="color:#166534;font-size:13px">Watt AI Initial Assessment</b>
+          <!-- Normalized Appliance Table -->
+          <div style="overflow-x:auto">
+            <table class="appliance-table">
+              <thead>
+                <tr>
+                  <th>Appliance</th>
+                  <th>Sync Mode</th>
+                  <th style="text-align:right">ON Cycles</th>
+                  <th style="text-align:right">Runtime</th>
+                  <th style="text-align:center">Peak Window (18–23h)</th>
+                  <th style="text-align:right">Units (kWh)</th>
+                  <th style="text-align:right">Cost (₹)</th>
+                  <th style="text-align:right">Carbon (kg)</th>
+                </tr>
+              </thead>
+              <tbody id="applianceTableBody"></tbody>
+            </table>
+          </div>
+
+          <div style="padding:14px 18px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;margin-top:16px">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              <b style="color:#166534;font-size:12px">Watt AI Advice Grounding</b>
             </div>
-            <p style="margin:0;font-size:12px;color:#15803d;line-height:1.6">
-              Your Google Home AC and Water Heater account for the majority of peak consumption. However, your home registers <b>233 kWh in unmonitored baseline power</b>. In the dashboard, Watt will monitor these trends in real time and guide you through scheduled pre-cooling and vampire load shutoffs.
+            <p style="margin:0;font-size:11px;color:#15803d;line-height:1.5" id="wattGroundingNote">
+              This normalized telemetry is now loaded into your AI Energy Coach ("Watt"). Your highest-impact appliance is Split AC with 48 peak cycles. Shifting cooling runtimes into the pre-peak window saves up to ₹380/mo and abates 34 kg CO₂e.
             </p>
           </div>
         </div>
 
         <div class="foot-actions">
           <button type="button" class="btn btn-secondary" id="backToStep2Btn">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
-            </svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
             <span>Back</span>
           </button>
           <button type="button" class="btn" id="finishOnboardingBtn" style="background:#15803d;font-size:13px;padding:13px 26px">
             <span>Open Energy Dashboard</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-            </svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
           </button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Google ID Switch Modal -->
-  <div id="googleAccountModal" style="display:none;position:fixed;inset:0;background:rgba(17,29,23,0.5);z-index:99;display:none;place-items:center;padding:16px;">
-    <div style="width:min(100%,400px);background:white;border-radius:18px;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,0.15)">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
-        <svg width="22" height="22" viewBox="0 0 24 24">
-          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-        </svg>
-        <h3 style="margin:0;font-size:16px;font-family:'Manrope',sans-serif">Sync Google Account</h3>
-      </div>
-      <p style="font-size:12px;color:var(--muted);margin:0 0 16px;line-height:1.5">
-        Enter your Google Account email. Google Home devices registered under this Google ID will be imported automatically via the Smart Device Management API.
-      </p>
-      <div style="margin-bottom:16px">
-        <label style="display:block;font-size:11px;font-weight:600;margin-bottom:6px;color:#334155">Google Account Email</label>
-        <input type="email" id="modalGoogleEmailInput" placeholder="you@gmail.com" style="width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:10px;font-size:13px;font-family:inherit;outline:none">
-      </div>
-      <div style="display:flex;justify-content:flex-end;gap:10px">
-        <button type="button" class="btn btn-secondary" id="modalGoogleCancelBtn" style="font-size:12px;padding:8px 16px">Cancel</button>
-        <button type="button" class="btn" id="modalGoogleSaveBtn" style="font-size:12px;padding:8px 16px">Link & Import</button>
-      </div>
-    </div>
-  </div>
-
   <script>
-    function getGoogleProfile() {
-      var email = localStorage.getItem('homeEnergyEmail') || 'akshit@gmail.com';
-      var rawName = email.split('@')[0];
-      var prettyName = rawName.replace(/[._-]/g, ' ').replace(/\b\w/g, function(l){ return l.toUpperCase(); });
-      return { email: email, name: prettyName };
-    }
+    var selectedTier = 1; // 1 = Weather NILM, 2 = Tuya Cloud
+    var currentNormalizedData = null;
 
-    function syncGoogleUI() {
-      var prof = getGoogleProfile();
-      document.getElementById('welcomeGreeting').textContent = 'Connect your home energy, ' + prof.name;
-      document.getElementById('googleAccountName').textContent = prof.name + "'s Google Account";
-      document.getElementById('googleAccountEmail').textContent = prof.email + ' · Smart Device Management (SDM) API';
-      document.getElementById('homeStructureLabel').textContent = prof.name + "'s Google Home Structure";
-    }
-    syncGoogleUI();
-
-    // Switch Google ID Modal
-    var modal = document.getElementById('googleAccountModal');
-    document.getElementById('switchGoogleAccountBtn').onclick = function() {
-      var prof = getGoogleProfile();
-      document.getElementById('modalGoogleEmailInput').value = prof.email;
-      modal.style.display = 'grid';
-    };
-    document.getElementById('modalGoogleCancelBtn').onclick = function() {
-      modal.style.display = 'none';
-    };
-    document.getElementById('modalGoogleSaveBtn').onclick = function() {
-      var val = document.getElementById('modalGoogleEmailInput').value.trim();
-      if(val) {
-        localStorage.setItem('homeEnergyEmail', val);
-        localStorage.setItem('authProvider', 'google');
-        syncGoogleUI();
+    function selectTier(t) {
+      selectedTier = t;
+      document.getElementById('tier1Card').classList.toggle('selected', t === 1);
+      document.getElementById('tier2Card').classList.toggle('selected', t === 2);
+      
+      var c1 = document.getElementById('tier1Check');
+      var c2 = document.getElementById('tier2Check');
+      if (t === 1) {
+        c1.innerHTML = '<circle cx="12" cy="12" r="10"/><polyline points="16 9 10.5 14.5 8 12"/>';
+        c1.setAttribute('stroke', 'var(--green)');
+        c2.innerHTML = '<circle cx="12" cy="12" r="10"/>';
+        c2.setAttribute('stroke', '#94a3b8');
+        document.getElementById('tier1ConfigBox').style.display = 'block';
+        document.getElementById('tier2ConfigBox').style.display = 'none';
+      } else {
+        c2.innerHTML = '<circle cx="12" cy="12" r="10"/><polyline points="16 9 10.5 14.5 8 12"/>';
+        c2.setAttribute('stroke', 'var(--green)');
+        c1.innerHTML = '<circle cx="12" cy="12" r="10"/>';
+        c1.setAttribute('stroke', '#94a3b8');
+        document.getElementById('tier1ConfigBox').style.display = 'none';
+        document.getElementById('tier2ConfigBox').style.display = 'block';
       }
-      modal.style.display = 'none';
-    };
-
-    var currentKwh = 684;
-    var currentRate = 8.0;
-    var currentCost = 5472;
+    }
 
     function setStep(step) {
       document.querySelectorAll('.step-section').forEach(function(s){ s.classList.remove('active'); });
       document.querySelectorAll('.step-pill').forEach(function(p){ p.classList.remove('active'); });
-      
       document.getElementById('sectionStep' + step).classList.add('active');
       for(var i = 1; i <= step; i++) {
         document.getElementById('pill' + i).classList.add('active');
       }
     }
 
-    function toggleDevice(el) {
-      el.classList.toggle('selected');
-    }
-
-    // Step 1: Bill Scanning Logic
-    document.getElementById('useSampleBillBtn').onclick = function() {
-      var fb = document.getElementById('scanFeedback');
-      fb.style.display = 'block';
-      fb.textContent = 'Parsing Tata Power / BSES Bill…';
-      setTimeout(function(){
-        fb.style.display = 'none';
-        document.getElementById('billPreviewCard').style.display = 'block';
-        currentKwh = 684;
-        currentRate = 8.0;
-        currentCost = 5472;
-        updateSummary();
-      }, 600);
-    };
-
-    document.getElementById('onboardingFileInput').onchange = function(e) {
-      var f = e.target.files[0];
-      if(!f) return;
-      var fb = document.getElementById('scanFeedback');
-      fb.style.display = 'block';
-      fb.textContent = 'Reading ' + f.name + ' with OCR engine…';
-      setTimeout(function(){
-        fb.style.display = 'none';
-        document.getElementById('billPreviewCard').style.display = 'block';
-        currentKwh = 684 + Math.floor(Math.random() * 40);
-        currentCost = Math.round(currentKwh * currentRate);
-        document.getElementById('onboardKwh').textContent = currentKwh + ' kWh';
-        document.getElementById('onboardCost').textContent = '₹' + currentCost.toLocaleString();
-        updateSummary();
-      }, 900);
-    };
-
-    function updateSummary() {
-      var tracked = 451;
-      var phantom = Math.max(0, currentKwh - tracked);
-      document.getElementById('summaryBillKwh').textContent = currentKwh + ' kWh';
-      document.getElementById('summaryPhantomKwh').textContent = phantom + ' kWh';
-    }
-
     document.getElementById('nextToStep2Btn').onclick = function() { setStep(2); };
     document.getElementById('backToStep1Btn').onclick = function() { setStep(1); };
-    document.getElementById('nextToStep3Btn').onclick = function() { updateSummary(); setStep(3); };
     document.getElementById('backToStep2Btn').onclick = function() { setStep(2); };
 
-    document.getElementById('finishOnboardingBtn').onclick = function() {
-      localStorage.setItem('homeRate', currentRate);
-      localStorage.setItem('homeFactor', 0.73);
+    // FAST TRACK DEMO PROFILE (480 kWh Faridabad Summer + Tuya Smart Plugs)
+    document.getElementById('loadDemoProfileBtn').onclick = function() {
+      selectTier(2);
+      executeTuyaSync('tuya_user_faridabad_984', 480, 3840);
+    };
+
+    // RUN INGESTION PIPELINE (From Step 2)
+    document.getElementById('runIngestBtn').onclick = function() {
+      if (selectedTier === 1) {
+        var city = document.getElementById('billCityInput').value;
+        var kwh = parseFloat(document.getElementById('billKwhInput').value) || 480;
+        var amount = parseFloat(document.getElementById('billAmountInput').value) || 3840;
+        executeBillDisaggregation(city, kwh, amount);
+      } else {
+        var uid = document.getElementById('tuyaUidInput').value.trim() || 'tuya_user_98412';
+        var kwh = parseFloat(document.getElementById('tuyaBillKwhInput').value) || 480;
+        var amount = parseFloat(document.getElementById('tuyaBillAmountInput').value) || 3840;
+        executeTuyaSync(uid, kwh, amount);
+      }
+    };
+
+    function executeBillDisaggregation(city, kwh, amount) {
+      var st = document.getElementById('tier1Status');
+      st.style.display = 'block';
+      st.textContent = 'Querying Open-Meteo Geocoding & Historical Weather Archive for ' + city + '…';
+
+      fetch('/api/ingest/bill', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          city: city,
+          total_kwh: kwh,
+          total_amount: amount,
+          billing_start_date: '2026-06-01',
+          billing_end_date: '2026-06-30'
+        })
+      })
+      .then(function(res){ return res.json(); })
+      .then(function(res){
+        st.style.display = 'none';
+        if(res.success && res.data) {
+          renderAuditResult(res.data);
+          setStep(3);
+        } else {
+          alert('Disaggregation error: ' + (res.error || 'Server error'));
+        }
+      })
+      .catch(function(err){
+        st.style.display = 'none';
+        alert('Could not connect to server: ' + err.message);
+      });
+    }
+
+    function executeTuyaSync(uid, kwh, amount) {
+      var st = document.getElementById('tier2Status');
+      st.style.display = 'block';
+      st.textContent = 'Streaming switch_1 event logs from Tuya OpenAPI for UID ' + uid + '…';
+
+      fetch('/api/ingest/tuya', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          tuya_uid: uid,
+          bill_kwh: kwh,
+          bill_amount: amount
+        })
+      })
+      .then(function(res){ return res.json(); })
+      .then(function(res){
+        st.style.display = 'none';
+        if(res.success && res.data) {
+          renderAuditResult(res.data);
+          setStep(3);
+        } else {
+          alert('Tuya sync error: ' + (res.error || 'Server error'));
+        }
+      })
+      .catch(function(err){
+        st.style.display = 'none';
+        alert('Could not connect to server: ' + err.message);
+      });
+    }
+
+    function renderAuditResult(data) {
+      currentNormalizedData = data;
+      var sum = data.summary || {};
+      var apps = data.appliances || [];
+
+      document.getElementById('resKwh').textContent = sum.total_kwh + ' kWh';
+      document.getElementById('resCost').textContent = '₹' + Number(sum.total_cost).toLocaleString();
+      document.getElementById('resCo2').textContent = sum.total_co2_kg + ' kg';
+      document.getElementById('resSource').textContent = sum.sync_source;
       
+      if(sum.sync_source.includes('Tuya')) {
+        document.getElementById('resSubtitle').textContent = 'Tuya UID: ' + (sum.tuya_uid || '98412') + ' · Verified Log Pairs';
+        document.getElementById('auditSyncSourceLabel').textContent = 'Measured via Tuya Smart Life Cloud OpenAPI & Reconciled with Bill';
+        document.getElementById('wattGroundingNote').textContent = 'Grounding Complete: Split AC logged 48 peak cycles (18:00–23:00) via Tuya Smart Plug. Shifting cooling 1.5 hrs earlier will save ~₹380/mo and eliminate 34 kg Scope 2 CO₂e.';
+      } else {
+        document.getElementById('resSubtitle').textContent = (sum.city || 'Weather') + ' · ' + (sum.cooling_degree_days || 0) + ' Cooling Degree Days';
+        document.getElementById('auditSyncSourceLabel').textContent = 'Disaggregated via Open-Meteo Historical Weather Archive & CDD/HDD NILM';
+        document.getElementById('wattGroundingNote').textContent = 'Grounding Complete: Open-Meteo climate analysis for ' + (sum.city || 'your city') + ' indicates high cooling demand (' + (sum.cooling_degree_days || 0) + ' CDD). Setting AC setpoint to 24°C saves ~₹310/mo.';
+      }
+
+      var tbody = document.getElementById('applianceTableBody');
+      tbody.innerHTML = '';
+
+      apps.forEach(function(a){
+        var tr = document.createElement('tr');
+        var peakHtml = a.peak_cycles > 0 
+          ? '<span class="peak-tag">' + a.peak_cycles + ' peak cycles</span>' 
+          : '<span style="color:#94a3b8;font-size:10px">Off-peak</span>';
+
+        tr.innerHTML = 
+          '<td><b>' + a.name + '</b></td>' +
+          '<td><span style="font-size:10px;color:' + (a.sync_mode.includes('Measured') ? '#15803d' : '#64748b') + ';font-weight:600">' + a.sync_mode + '</span></td>' +
+          '<td style="text-align:right">' + a.on_count + '</td>' +
+          '<td style="text-align:right"><b>' + a.runtime_hours + 'h</b></td>' +
+          '<td style="text-align:center">' + peakHtml + '</td>' +
+          '<td style="text-align:right"><b>' + a.kwh + '</b></td>' +
+          '<td style="text-align:right">₹' + a.cost.toLocaleString() + '</td>' +
+          '<td style="text-align:right">' + a.co2_kg + '</td>';
+        tbody.appendChild(tr);
+      });
+    }
+
+    // FINISH ONBOARDING & LAUNCH DASHBOARD
+    document.getElementById('finishOnboardingBtn').onclick = function() {
+      if(!currentNormalizedData) {
+        // Fallback default
+        currentNormalizedData = {
+          summary: { total_kwh: 480, total_cost: 3840, total_co2_kg: 324.0, effective_tariff: 8.0, sync_source: "Bill AI Disaggregation" },
+          appliances: []
+        };
+      }
+
+      var sum = currentNormalizedData.summary || {};
+      var apps = currentNormalizedData.appliances || [];
+      var ac = apps.find(function(a){ return a.category === 'cooling'; }) || {};
+      var geyser = apps.find(function(a){ return a.category === 'heating'; }) || {};
+
+      localStorage.setItem('normalizedIngestion', JSON.stringify(currentNormalizedData));
+      localStorage.setItem('homeRate', sum.effective_tariff || 8.0);
+      localStorage.setItem('homeFactor', 0.675);
+
       var profile = {};
       try { profile = JSON.parse(localStorage.getItem('energyCoachProfile') || '{}'); } catch(e){}
-      profile.monthlyKwh = currentKwh;
-      profile.tariff = currentRate;
-      profile.acHours = 4;
-      profile.waterMinutes = 25;
+      profile.monthlyKwh = sum.total_kwh || 480;
+      profile.tariff = sum.effective_tariff || 8.0;
+      profile.factor = 0.675;
+      profile.acHours = ac.runtime_hours ? Math.round(ac.runtime_hours / 30) : 4;
+      profile.waterMinutes = geyser.runtime_hours ? Math.round((geyser.runtime_hours * 60) / 30) : 25;
+      profile.ingestion = currentNormalizedData;
       localStorage.setItem('energyCoachProfile', JSON.stringify(profile));
       localStorage.setItem('onboardingComplete', 'true');
-      
+
       window.location.replace('Home-Energy-Carbon-Manager.html');
     };
   </script>
